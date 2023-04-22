@@ -1,9 +1,17 @@
 const express = require("express");
 const bodyParser = require('body-parser');
-require('dotenv').config();
+const path = require('path');
+const dotenv = require('dotenv');
+
+// Set the current working directory to the directory containing index.js
+process.chdir(path.dirname(process.argv[1]));
+
+// Load environment variables from .env file
+dotenv.config();
 const app = express();
 
 const API_KEY = process.env.API_KEY;
+console.log(API_KEY);
 // Use the body-parser middleware to parse JSON requests
 app.use(bodyParser.json());
 
