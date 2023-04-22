@@ -1,0 +1,5 @@
+node.js
+express
+body-parser
+mysql
+dotenv
