@@ -11,7 +11,6 @@ dotenv.config();
 const app = express();
 
 const API_KEY = process.env.API_KEY;
-console.log(API_KEY);
 // Use the body-parser middleware to parse JSON requests
 app.use(bodyParser.json());
 
