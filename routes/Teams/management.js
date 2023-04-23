@@ -19,6 +19,7 @@ router.get("/", (req, res) =>{
         firstName: item.employeeFirstname,
         lastName: item.employeeLastname,
         team: "Management",
+        position: item.employeePosition,
         url: item.picUrl,
       }
     });
