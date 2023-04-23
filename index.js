@@ -35,16 +35,14 @@ const companyRouter = require("./routes/company");;
 const managementRouter = require("./routes/Teams/management");
 const softwareRouter = require("./routes/Teams/software");
 const hardwareRouter = require("./routes/Teams/hardware");
+const timelineRouter = require("./routes/timeline");
 const productRouter = require("./routes/products");
 
 app.use("/company", companyRouter);
 app.use("/management", managementRouter);
 app.use("/software", softwareRouter);
 app.use("/hardware", hardwareRouter);
-
-app.get("/protected", (req, res) => {
-  res.send("This is a protected endpoint");
-});
+app.use("/timeline", timelineRouter);
 
 const port = 3000
 app.listen(port, () => {
