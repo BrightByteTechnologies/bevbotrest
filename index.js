@@ -14,6 +14,7 @@ const routeApiKeys = {
   '/management': process.env.WEBSITE_KEY,
   '/software': process.env.WEBSITE_KEY,
   '/hardware': process.env.WEBSITE_KEY,
+  '/timeline': process.env.WEBSITE_KEY,
   '/tables': process.env.RESTAURANT_KEY,
   '/tables/reserve': process.env.RESTAURANT_RESERVING_KEY,
   '/qrcodes': process.env.QR_KEY,
