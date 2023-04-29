@@ -1,5 +1,6 @@
 const express = require("express");
 const mysql = require('mysql');
+const sqlstring = require('sqlstring');
 
 const router = express.Router();
 const pool = mysql.createPool({
@@ -16,7 +17,10 @@ router.get("/", (req, res) => {
         return;
     }
 
-    pool.query("SELECT * FROM tables WHERE restaurant_id = ?", [restaurantId], (error, results, fields) => {
+    const escapedRestaurantId = sqlstring.escape(restaurantId);
+    const sql = `SELECT * FROM tables WHERE restaurant_id = ${escapedRestaurantId}`;
+
+    pool.query(sql, (error, results, fields) => {
         if (error) throw error;
 
         const formattedResults = results.map(item => {
@@ -38,25 +42,22 @@ router.put("/reserve/:table_no", (req, res) => {
     }
     const { table_no } = req.params;
 
+    const escapedRestaurantId = sqlstring.escape(restaurantId);
+    const escapedTableNo = sqlstring.escape(table_no);
+
+    const sql = 
+        `UPDATE tables SET reserved = 1 WHERE restaurant_id = ${escapedRestaurantId} AND tableNo = ${escapedTableNo} AND reserved = 0`;
+
     // Update the table reservation status
-    pool.query(
-        "UPDATE tables SET reserved = 1 WHERE restaurant_id = ? AND tableNo = ? AND reserved = 0",
-        [restaurantId, table_no],
-        (error, results, fields) => {
-            if (error) {
-                console.error(error);
-                res.status(500).send("Internal Server Error");
-                return;
-            }
-
-            if (results.affectedRows === 0) {
-                res.status(404).send("Table not found or already reserved");
-                return;
-            }
-
-            res.sendStatus(200);
+    pool.query(sql, (error, results, fields) => {
+        if (error) {
+            console.error(error);
+            res.status(500).send("Internal Server Error");
+            return;
         }
-    );
+
+        res.sendStatus(200);
+    });
 });
 
 module.exports = router;

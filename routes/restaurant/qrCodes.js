@@ -1,5 +1,6 @@
 const express = require("express");
 const mysql = require('mysql');
+const sqlstring = require('sqlstring');
 
 const router = express.Router();
 const pool = mysql.createPool({
@@ -11,18 +12,28 @@ const pool = mysql.createPool({
 
 router.get("/", (req, res) => {
     const restaurantId = req.query.restaurant_id;
-    if (!restaurantId) {
-        res.status(400).send("restaurant_id is required");
+    const token = req.query.token;
+
+    if (!restaurantId || !token) {
+        res.status(400).send("restaurant_id and token is required");
         return;
     }
 
-    pool.query("SELECT token, tableNo FROM codes WHERE restaurant_id = ?", [restaurantId], (error, results, fields) => {
-        if (error) throw error;
+    const escapedRestaurantId = sqlstring.escape(restaurantId);
+    const escapedToken = sqlstring.escape(token);
+    const sql = `SELECT tableNo, used FROM codes WHERE restaurant_id = ${escapedRestaurantId} AND token = ${escapedToken}`;
+
+    pool.query(sql, (error, results, fields) => {
+        if (error) {
+            console.error(error);
+            res.status(500).send("Internal Server Error");
+            return;
+        }
 
         const formattedResults = results.map(item => {
             return {
-                token: item.token,
                 tableNo: item.tableNo,
+                used: item.used,
             }
         });
 
@@ -34,56 +45,43 @@ router.post('/register', (req, res) => {
     const restaurantId = req.body.restaurant_id;
     const token = req.body.token;
     const tableNo = req.body.tableNo;
-    if (!token || !tableNo) {
+
+    if (!restaurantId || !token || !tableNo) {
         res.status(400).send('restaurant_id, token and tableNo are required!');
         return;
     }
 
+    const escapedRestaurantId = sqlstring.escape(restaurantId);
+    const escapedToken = sqlstring.escape(token);
+    const escapedTableNo = sqlstring.escape(tableNo);
+    const sql = `SELECT id FROM restaurants WHERE restaurant_id = ${escapedRestaurantId}`;
+
     // Check if the restaurant exists
-    checkRestaurantId(restaurantId, err => {
-        if (err) {
-            console.error(err);
-            res.status(err.status).send(err.message);
+    pool.query(sql, (error, results, fields) => {
+        if (error) {
+            console.error(error);
+            res.status(500).send("Internal Server Error");
             return;
         }
 
+        if (results.length < 1) {
+            res.status(404).send("Restaurant not found");
+            return;
+        }
+
+        const insertSql = `INSERT INTO codes VALUES (null, ${escapedRestaurantId}, ${escapedToken}, ${escapedTableNo})`;
+
         // Insert the new record
-        pool.query(
-            "INSERT INTO codes VALUES (null, ?, ?, ?)",
-            [restaurantId, token, tableNo],
-            (error, results) => {
-                if (error) {
-                    console.error(error);
-                    res.status(err[0]).send(err[1]);
-                    return;
-                }
-
-                res.status(201).send("Token registered successfully");
-            }
-        );
-    });
-});
-
-function checkRestaurantId(restaurantId, callback) {
-    // Check if the restaurant exists
-    pool.query(
-        "SELECT id FROM restaurants WHERE restaurant_id = ?",
-        [restaurantId],
-        (error, results, fields) => {
+        pool.query(insertSql, (error, results) => {
             if (error) {
                 console.error(error);
-                callback({ status: 500, message: "Internal Server Error" });
+                res.status(500).send("Internal Server Error");
                 return;
             }
 
-            if (results.length < 1) {
-                callback({ status: 404, message: "Restaurant not found" });
-                return;
-            }
-
-            callback(null, results);
-        }
-    );
-}
+            res.status(201).send("Token registered successfully");
+        });
+    });
+});
 
 module.exports = router;
