@@ -69,7 +69,7 @@ router.post('/register', (req, res) => {
             return;
         }
 
-        const insertSql = `INSERT INTO codes VALUES (null, ${escapedRestaurantId}, ${escapedToken}, ${escapedTableNo})`;
+        const insertSql = `INSERT INTO codes VALUES (null, ${escapedRestaurantId}, ${escapedToken}, ${escapedTableNo}, 0)`;
 
         // Insert the new record
         pool.query(insertSql, (error, results) => {
