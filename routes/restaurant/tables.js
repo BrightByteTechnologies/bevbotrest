@@ -6,7 +6,7 @@ const router = express.Router();
 const pool = mysql.createPool({
     host: "localhost",
     user: "restaurantadmin",
-    password: "dadFwsgeh",
+    password: "bbt2_restaurants_admin",
     database: "restaurant",
 });
 
