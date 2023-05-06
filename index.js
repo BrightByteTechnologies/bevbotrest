@@ -19,6 +19,7 @@ const routeApiKeys = {
   '/tables/reserve': process.env.RESTAURANT_RESERVING_KEY,
   '/qrcodes': process.env.QR_KEY,
   '/qrcodes/register': process.env.QR_REGISTRATION_KEY,
+  '/qrcodes/use': process.env.QR_REGISTRATION_KEY,
   '/products': process.env.PRODOUCTS_KEY,
   // add more routes and API keys here as needed
 };
@@ -29,7 +30,6 @@ app.use(bodyParser.json());
 // Define a middleware that checks the API key in the request header
 const checkApiKey = (req, res, next) => {
   const apiKey = routeApiKeys[req.path];
-
   // If the API key is missing or doesn't match the key, send a 401 Unauthorized response
   if (!apiKey || apiKey !== req.headers['api-key']) {
     res.status(401).send('Unauthorized');

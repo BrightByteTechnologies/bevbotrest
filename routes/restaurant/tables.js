@@ -34,13 +34,13 @@ router.get("/", (req, res) => {
     });
 });
 
-router.put("/reserve/:table_no", (req, res) => {
+router.post("/reserve", (req, res) => {
     const restaurantId = req.query.restaurant_id;
-    if (!restaurantId) {
-        res.status(400).send("restaurant_id is required");
+    const table_no = req.query.tableNo;
+    if (!restaurantId || !table_no) {
+        res.status(400).send("restaurant_id and tableNo are required");
         return;
     }
-    const { table_no } = req.params;
 
     const escapedRestaurantId = sqlstring.escape(restaurantId);
     const escapedTableNo = sqlstring.escape(table_no);

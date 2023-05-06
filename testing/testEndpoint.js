@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 dotenv.config();
-const API_KEY = 'qr_registration_test';
-const key = 2;
+const API_KEY = 'pi59hh6X1Z';
+const key = 1;
 switch (key) {
   case 1:
     nonePostFetch();
@@ -11,8 +11,7 @@ switch (key) {
     break;
 }
 function nonePostFetch() {
-  console.log(API_KEY);
-  fetch('http://localhost:3000/qrcodes?restaurant_id=test_restaurant', {
+  fetch('http://api.brightbytetechnologies.de/qrcodes?restaurant_id=bbt_restaurant_Hd8s0d&token=659eeda30654a9b9bcd61eb34229f82d', {
   headers: {
     'api-key': API_KEY
   }

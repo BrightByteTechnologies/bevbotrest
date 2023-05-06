@@ -84,4 +84,45 @@ router.post('/register', (req, res) => {
     });
 });
 
+router.post('/use', (req, res) => {
+    const restaurantId = req.body.restaurant_id;
+    const token = req.body.token;
+
+    if (!restaurantId || !token) {
+        res.status(400).send('restaurant_id and token are required!');
+        return;
+    }
+
+    const escapedRestaurantId = sqlstring.escape(restaurantId);
+    const escapedToken = sqlstring.escape(token);
+    const sql = `SELECT id FROM restaurants WHERE restaurant_id = ${escapedRestaurantId}`;
+
+    // Check if the restaurant exists
+    pool.query(sql, (error, results, fields) => {
+        if (error) {
+            console.error(error);
+            res.status(500).send("Internal Server Error");
+            return;
+        }
+
+        if (results.length < 1) {
+            res.status(404).send("Restaurant not found");
+            return;
+        }
+
+        const insertSql = `UPDATE codes SET used = 1 WHERE restaurant_id = ${escapedRestaurantId} AND token = ${escapedToken}`;
+
+        // Insert the new record
+        pool.query(insertSql, (error, results) => {
+            if (error) {
+                console.error(error);
+                res.status(500).send("Internal Server Error");
+                return;
+            }
+
+            res.status(200).send("OK");
+        });
+    });
+});
+
 module.exports = router;
