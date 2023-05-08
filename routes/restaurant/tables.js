@@ -35,13 +35,13 @@ router.get("/", (req, res) => {
 });
 
 router.post("/reserve", (req, res) => {
-    const restaurantId = req.query.restaurant_id;
-    const table_no = req.query.tableNo;
+    const restaurantId = req.body.restaurant_id;
+    const table_no = req.body.tableNo;
     if (!restaurantId || !table_no) {
         res.status(400).send("restaurant_id and tableNo are required");
         return;
     }
-
+    console.log("/reserver called");
     const escapedRestaurantId = sqlstring.escape(restaurantId);
     const escapedTableNo = sqlstring.escape(table_no);
 
