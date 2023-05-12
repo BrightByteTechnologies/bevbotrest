@@ -21,6 +21,8 @@ const routeApiKeys = {
   '/qrcodes/register': process.env.QR_REGISTRATION_KEY,
   '/qrcodes/use': process.env.QR_REGISTRATION_KEY,
   '/products': process.env.PRODUCTS_KEY,
+  '/orders': process.env.ORDER_KEY,
+  '/orders/place': process.env.ORDER_CHANGE_KEY
   // add more routes and API keys here as needed
 };
 
@@ -30,7 +32,6 @@ app.use(bodyParser.json());
 // Define a middleware that checks the API key in the request header
 const checkApiKey = (req, res, next) => {
   const apiKey = routeApiKeys[req.path];
-  console.log("Route called:", req.path);
   // If the API key is missing or doesn't match the key, send a 401 Unauthorized response
   if (!apiKey || apiKey !== req.headers['api-key']) {
     res.status(401).send('Unauthorized');
@@ -53,6 +54,7 @@ const timelineRouter = require("./routes/timeline");
 const tablesRouter = require("./routes/restaurant/tables");
 const qrCodesRouter = require("./routes/restaurant/qrCodes");
 const productRouter = require("./routes/restaurant/products");
+const ordersRouter = require("./routes/restaurant/orders");
 
 app.use("/management", managementRouter);
 app.use("/software", softwareRouter);
@@ -63,6 +65,7 @@ app.use("/timeline", timelineRouter);
 app.use("/tables", tablesRouter);
 app.use("/qrcodes", qrCodesRouter);
 app.use("/products", productRouter);
+app.use("/orders", ordersRouter);
 
 const port = 3000
 app.listen(port, () => {
