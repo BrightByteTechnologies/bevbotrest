@@ -22,7 +22,9 @@ const routeApiKeys = {
   '/qrcodes/use': process.env.QR_REGISTRATION_KEY,
   '/products': process.env.PRODUCTS_KEY,
   '/orders': process.env.ORDER_KEY,
-  '/orders/place': process.env.ORDER_CHANGE_KEY
+  '/orders/unfinished': process.env.ORDER_KEY,
+  '/orders/place': process.env.ORDER_CHANGE_KEY,
+  '/orders/finish': process.env.ORDER_CHANGE_KEY,
   // add more routes and API keys here as needed
 };
 
@@ -54,7 +56,7 @@ const timelineRouter = require("./routes/timeline");
 const tablesRouter = require("./routes/restaurant/tables");
 const qrCodesRouter = require("./routes/restaurant/qrCodes");
 const productRouter = require("./routes/restaurant/products");
-const ordersRouter = require("./routes/restaurant/orders");
+const ordersRouter = require("./routes/restaurant/orders"); // Pass the function as a parameter
 
 app.use("/management", managementRouter);
 app.use("/software", softwareRouter);
@@ -67,7 +69,7 @@ app.use("/qrcodes", qrCodesRouter);
 app.use("/products", productRouter);
 app.use("/orders", ordersRouter);
 
-const port = 3000
+const port = 3000;
 app.listen(port, () => {
   console.log("Server started!");
 });

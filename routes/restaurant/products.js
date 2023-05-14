@@ -24,8 +24,12 @@ router.get("/", (req, res) =>{
               LEFT JOIN taxes ON products.taxID = taxes.id WHERE products.restaurant_id = ${escapedRestaurantId}`;
 
   pool.query(sql, (error, results, fields) => {
-    if (error) throw error;
-
+    if (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    
     const formattedResults = results.map(item => {
       return {
           id: item.id,
