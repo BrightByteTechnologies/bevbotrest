@@ -212,6 +212,28 @@ function createOrder(items, restaurantId, codeId, tableNo, total) {
   });
 }
 
+router.post("/finish", (req, res) => {
+  const restaurantId = req.body.restaurant_id;
+  const orderID = req.body.order_id;
+  
+  if(!restaurantId || !orderID) {
+    res.status(400).send("restaurant_id and order_id are required!");
+  }
+
+  const escapedRestaurantId = sqlstring.escape(restaurantId);
+  const escapedOrderID = sqlstring.escape(orderID);
+
+  const sql = `UPDATE orders SET done = 1 WHERE id = ${escapedOrderID} AND restaurant_id = ${escapedRestaurantId}`;
+  pool.query(sql, (error, results, fields) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    res.status(200).send("OK");
+  });
+});
+
 const getUnfinishedOrders = (restaurant_id) => {
   return new Promise((resolve, reject) => {
     const escapedRestaurantId = sqlstring.escape(restaurant_id);
