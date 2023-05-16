@@ -173,7 +173,7 @@ router.get("/unfinished", async (req, res) => {
   try {
     const response = await getUnfinishedOrders(restaurantId);
     if (response.status === 200) {
-      res.json(response.data);
+      res.status(200).json(response.data);
     } else {
       res.status(response.status).send(response.message);
     }
