@@ -1,6 +1,5 @@
 const { json } = require("body-parser");
 const express = require("express");
-const removeUploadedFiles = require("multer/lib/remove-uploaded-files");
 const mysql = require('mysql');
 const sqlstring = require('sqlstring');
 
