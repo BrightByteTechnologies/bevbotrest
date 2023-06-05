@@ -60,7 +60,6 @@ router.post("/reserve", (req, res) => {
 
     // Clear previous timeout for the table, if any
     clearTimeout(tableTimeouts.get(table_no));
-
     // Set a new timeout for unreserving the table
     const timeout = setTimeout(() => unreserve(escapedTableNo, escapedRestaurantId), reservedTime * 1000);
     tableTimeouts.set(table_no, timeout);
@@ -81,17 +80,14 @@ router.post("/reserve", (req, res) => {
 
 function unreserve(tableNo, restaurant_id) {
     const sql =
-        `UPDATE tables SET reserved = 0 WHERE restaurant_id = ${escapedRestaurantId} AND tableNo = ${escapedTableNo}`;
+        `UPDATE tables SET reserved = 0 WHERE restaurant_id = ${restaurant_id} AND tableNo = ${tableNo}`;
 
     // Update the table reservation status
     pool.query(sql, (error, results, fields) => {
         if (error) {
             console.error(error);
-            res.status(500).send("Internal Server Error");
             return;
         }
-
-        res.sendStatus(200);
     });
 }
 
