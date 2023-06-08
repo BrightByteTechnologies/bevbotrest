@@ -1,3 +1,4 @@
+// Import required modules
 const express = require("express");
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -10,6 +11,7 @@ process.chdir(path.dirname(process.argv[1]));
 dotenv.config();
 const app = express();
 
+// Define route-specific API keys
 const routeApiKeys = {
   '/management': process.env.WEBSITE_KEY,
   '/software': process.env.WEBSITE_KEY,
@@ -57,7 +59,7 @@ const timelineRouter = require("./routes/timeline");
 const tablesRouter = require("./routes/restaurant/tables");
 const qrCodesRouter = require("./routes/restaurant/qrCodes");
 const productRouter = require("./routes/restaurant/products");
-const ordersRouter = require("./routes/restaurant/orders"); // Pass the function as a parameter
+const ordersRouter = require("./routes/restaurant/orders");
 
 app.use("/management", managementRouter);
 app.use("/software", softwareRouter);

@@ -1,46 +1,63 @@
-# Readme for Node.js and Express API
-This Node.js and Express API is designed to serve different endpoints related to our company, its teams and products. The API is protected by an API key that needs to be provided in the header of each request.
+# Express Server with API Key Authentication
 
-# Requirements
-This API requires Node.js to be installed on your machine. You can download it from the official website.
+This repository contains an Express server implementation with API key authentication for different routes. The server is built using Node.js and MySQL.
 
-# Installation
-- Clone the repository:
-git clone https://github.com/brightbytetechnologies/bevbotrest.git
-- Navigate to the project folder:
-cd path/to/localclones/bevbotrest
-- Install the dependencies:
+## Getting Started
+
+To get started with the server, follow the instructions below.
+
+### Prerequisites
+
+- Node.js installed on your machine
+- MySQL server running locally
+- `.env` file with the required environment variables (see the example below)
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/yourusername/express-api-key-server.git
+Install the dependencies:
+
+cd express-api-key-server
 npm install
+Create a .env file in the root directory and provide the following environment variables:
 
-# Usage
-API Key
-To use the API, you need to provide a valid API key in the api-key header of each request. The API key is defined in the API_KEY constant at the top of the index.js file. You should replace this value with your own API key.
+WEBSITE_KEY=your_website_api_key
+RESTAURANT_KEY=your_restaurant_api_key
+RESTAURANT_RESERVING_KEY=your_restaurant_reserving_api_key
+QR_KEY=your_qr_api_key
+QR_REGISTRATION_KEY=your_qr_registration_api_key
+PRODUCTS_KEY=your_products_api_key
+ORDER_KEY=your_order_api_key
+ORDER_CHANGE_KEY=your_order_change_api_key
+Start the server:
 
-Endpoints
-The following endpoints are available:
+node index.js
+The server will start running on http://localhost:3000.
 
-- GET /company
-Returns information about the company / logo.
+Routes and API Keys
+The server defines the following routes and their corresponding API keys:
 
-- GET /homepage
-Returns information for the homepage of the company.
+/management - Website Management Route (Requires WEBSITE_KEY)
+/software - Software Team Route (Requires WEBSITE_KEY)
+/hardware - Hardware Team Route (Requires WEBSITE_KEY)
+/timeline - Timeline Route (Requires WEBSITE_KEY)
+/tables - Restaurant Tables Route (Requires RESTAURANT_KEY)
+/tables/reserve - Table Reservation Route (Requires RESTAURANT_RESERVING_KEY)
+/qrcodes - Restaurant QR Codes Route (Requires QR_KEY)
+/qrcodes/register - QR Code Registration Route (Requires QR_REGISTRATION_KEY)
+/qrcodes/use - QR Code Usage Route (Requires QR_REGISTRATION_KEY)
+/products - Restaurant Products Route (Requires PRODUCTS_KEY)
+/orders - Restaurant Orders Route (Requires ORDER_KEY)
+/orders/unfinished - Unfinished Orders Route (Requires ORDER_KEY)
+/orders/place - Place Order Route (Requires ORDER_CHANGE_KEY)
+/orders/finish - Finish Order Route (Requires ORDER_CHANGE_KEY)
+Feel free to add more routes and API keys as needed.
 
-- GET /managment
-Returns information about the company's management team.
+### Development
+The server uses the Express framework and MySQL for database operations. You can modify the existing routes or add new ones to suit your requirements. Make sure to handle errors and perform necessary validations when extending the functionality.
 
-- GET /software
-Returns information about the company's software team.
-
-- GET /hardware
-Returns information about the company's hardware team.
-
-- GET /products
-Returns a list of the company's products and the needed information.
-
-- GET /protected
-A protected endpoint that can only be accessed with a valid API key.
-
-# Example
-Here's an example of how to use the API with PHP:
-
-![screen](php-example.png)
+### License
+This project is licensed under the MIT License. See the LICENSE file for details.

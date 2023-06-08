@@ -211,18 +211,25 @@ function createOrder(items, restaurantId, codeId, tableNo, total) {
   });
 }
 
+// Handler for the "/finish" route that marks an order as finished
 router.post("/finish", (req, res) => {
   const restaurantId = req.body.restaurant_id;
   const orderID = req.body.order_id;
   
+  // Check if required parameters are present
   if(!restaurantId || !orderID) {
     res.status(400).send("restaurant_id and order_id are required!");
+    return;
   }
 
+  // Escape restaurantId and orderID to prevent SQL injection
   const escapedRestaurantId = sqlstring.escape(restaurantId);
   const escapedOrderID = sqlstring.escape(orderID);
 
+  // SQL query to update the order status to finished
   const sql = `UPDATE orders SET done = 1 WHERE id = ${escapedOrderID} AND restaurant_id = ${escapedRestaurantId}`;
+
+  // Execute the SQL query
   pool.query(sql, (error, results, fields) => {
     if (error) {
       console.error(error);
@@ -233,9 +240,13 @@ router.post("/finish", (req, res) => {
   });
 });
 
+// Function to retrieve unfinished orders for a specific restaurant
 const getUnfinishedOrders = (restaurant_id) => {
   return new Promise((resolve, reject) => {
+    // Escape restaurant_id to prevent SQL injection
     const escapedRestaurantId = sqlstring.escape(restaurant_id);
+
+    // SQL query to retrieve unfinished orders with related information
     const sql = `SELECT o.id, o.tableNo, o.date, o.total, p.productName, p.productDesc, p.basePrice, oi.amount, p.picUrl, t.amount as taxAmount 
                 FROM order_items oi, products p, orders o, taxes t 
                 WHERE oi.product_id = p.id
@@ -244,6 +255,7 @@ const getUnfinishedOrders = (restaurant_id) => {
                 AND o.done = 0
                 AND t.id = p.taxID`;
 
+    // Execute the SQL query
     pool.query(sql, (error, results, fields) => {
       if (error) {
         console.error(error);
@@ -254,6 +266,7 @@ const getUnfinishedOrders = (restaurant_id) => {
         reject(data);
       }
 
+      // Format the results to desired format
       const formattedResults = results.map(item => {
         return {
           orderId: item.id,
@@ -268,6 +281,7 @@ const getUnfinishedOrders = (restaurant_id) => {
         };
       });
 
+      // Prepare the response data
       const data = {
         status: 200,
         message: 'OK',
@@ -302,5 +316,8 @@ function isJSON(variable) {
   }
 }
 
-// Pass the function as a parameter when exporting the router
+// Pass the function as middleware to the router
+router.use(json());
+
+// Export the router
 module.exports = router;
