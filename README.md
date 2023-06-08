@@ -20,9 +20,8 @@ To get started with the server, follow the instructions below.
    git clone https://github.com/yourusername/express-api-key-server.git
    ```
 2. Install the dependencies:
-
-   cd path/to/your/api-folder
    ```bash
+   cd path/to/your/api-folder
    npm install 
    ```
    
