@@ -17,7 +17,7 @@ To get started with the server, follow the instructions below.
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/express-api-key-server.git
+   git clone https://github.com/BrightByteTechnologies/bevbotrest.git
    ```
 2. Install the dependencies:
    ```bash
