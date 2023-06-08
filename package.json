@@ -1,0 +1,25 @@
+{
+  "name": "bevbotrest",
+  "version": "1.0.0",
+  "description": "Express server with API key authentication",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "express",
+    "api",
+    "authentication",
+    "node.js",
+    "mysql",
+    "dotenv"
+  ],
+  "author": "LetsGaming",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "body-parser": "^1.19.0",
+    "mysql": "^2.18.1",
+    "dotenv": "^10.0.0"
+  }
+}
