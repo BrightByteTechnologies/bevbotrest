@@ -66,4 +66,4 @@ Feel free to add more routes and API keys as needed.
 The server uses the Express framework and MySQL for database operations. You can modify the existing routes or add new ones to suit your requirements. Make sure to handle errors and perform necessary validations when extending the functionality.
 
 ### License
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the [MIT License](./LICENSE). See the LICENSE file for details.
